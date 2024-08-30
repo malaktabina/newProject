@@ -15,11 +15,13 @@ class Event {
   }
 }
 
-class User {
+abstract class User {
   String name;
   int serialNumber;
   String type;
   User(this.name, this.serialNumber, this.type);
+
+  void information();
 }
 
 class Admin extends User {
@@ -40,7 +42,12 @@ class Admin extends User {
     String? eventTime = stdin.readLineSync();
 
     print("Enter event available tickets: ");
-    int eventAvailableTickets = int.parse(stdin.readLineSync() ?? '0');
+    int eventAvailableTickets = int.parse(stdin.readLineSync()!);
+    if (eventAvailableTickets > 0) {
+      print("Available tickets: ${eventAvailableTickets}  ");
+    } else {
+      print("Error: Number of tickets must be positive.");
+    }
 
     return Event(
         eventName ?? 'Unknown',
@@ -49,16 +56,31 @@ class Admin extends User {
         eventTime ?? 'Unknown time',
         eventAvailableTickets);
   }
+
+  @override
+  void information() {
+    print("Admin: ${name}, Serial Number: ${serialNumber}, Type: ${type}");
+  }
 }
 
 class Employee extends User {
   Employee(String name, int serialNumber, String type)
       : super(name, serialNumber, type);
+
+  @override
+  void information() {
+    print("Employee: ${name}, Serial Number: ${serialNumber}, Type: ${type}");
+  }
 }
 
 class Client extends User {
   Client(String name, int serialNumber, String type)
       : super(name, serialNumber, type);
+
+  @override
+  void information() {
+    print("Client: ${name}, Serial Number: ${serialNumber}, Type: ${type}");
+  }
 }
 
 void reserve(Event event) {
