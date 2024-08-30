@@ -7,7 +7,8 @@ class Event {
   String time;
   int availableTickets;
 
-  Event(this.name, this.description, this.place, this.time, this.availableTickets);
+  Event(this.name, this.description, this.place, this.time,
+      this.availableTickets);
 
   bool hasAvailableTickets() {
     return availableTickets > 0;
@@ -22,7 +23,8 @@ class User {
 }
 
 class Admin extends User {
-  Admin(String name, int serialNumber, String type) : super(name, serialNumber, type);
+  Admin(String name, int serialNumber, String type)
+      : super(name, serialNumber, type);
 
   Event createEvent() {
     print("Enter event name: ");
@@ -41,21 +43,22 @@ class Admin extends User {
     int eventAvailableTickets = int.parse(stdin.readLineSync() ?? '0');
 
     return Event(
-      eventName ?? 'Unknown', // Default value if null
-      eventDescription ?? 'No description',
-      eventPlace ?? 'Unknown place',
-      eventTime ?? 'Unknown time',
-      eventAvailableTickets
-    );
+        eventName ?? 'Unknown',
+        eventDescription ?? 'No description',
+        eventPlace ?? 'Unknown place',
+        eventTime ?? 'Unknown time',
+        eventAvailableTickets);
   }
 }
 
 class Employee extends User {
-    Employee(String name, int serialNumber, String type) : super(name, serialNumber, type);
+  Employee(String name, int serialNumber, String type)
+      : super(name, serialNumber, type);
 }
 
 class Client extends User {
-    Client(String name, int serialNumber, String type) : super(name, serialNumber, type);
+  Client(String name, int serialNumber, String type)
+      : super(name, serialNumber, type);
 }
 
 void reserve(Event event) {
@@ -93,53 +96,44 @@ void main() {
       return;
     }
   } else if (answer == emplopyee.type) {
-
     print("Welcome ${emplopyee.name}");
-
   } else if (answer == client.type) {
-
     print("Welcome ${client.name}");
 
-  Event event = Event(
-      "Cinderella Play",
-      "A magical play about Cinderella and her adventures",
-      "The Grand Opera House",
-      "20:00 PM",
-      5);
-  print("play name: ${event.name} ,description: ${event.description},place: ${event.place},time: ${event.time}");
-  
+    Event event = Event(
+        "Cinderella Play",
+        "A magical play about Cinderella and her adventures",
+        "The Grand Opera House",
+        "20:00 PM",
+        5);
+    print(
+        "play name: ${event.name} ,description: ${event.description},place: ${event.place},time: ${event.time}");
 
-  Event event2 = Event(
-      "Programming",
-      "A magical play about Cinderella and her adventures",
-      "The Grand Opera House",
-      "20:00 PM",
-      10);
+    Event event2 = Event(
+        "Programming",
+        "A magical play about Cinderella and her adventures",
+        "The Grand Opera House",
+        "20:00 PM",
+        10);
 
- 
-  print("Welcome to booking app");
+    print("Welcome to booking app");
 
-  String? answer;
+    String? answer;
 
-  while (event.availableTickets > 0) {
-    stdout.write('Do You want to reserve another ticket ?');
-    answer = stdin.readLineSync();
-    if (answer == "yes") {
-      reserve(event);
-      print("Your ticket has been reserved");
-      print("Available tickets is ${event.availableTickets}");
-    } else {
-      print("Thank you for using our booking app");
-      exit(0);
+    while (event.availableTickets > 0) {
+      print('Do You want to reserve ticket ?');
+      answer = stdin.readLineSync();
+      if (answer == "yes") {
+        reserve(event);
+        print("Your ticket has been reserved");
+        print("Available tickets is ${event.availableTickets}");
+      } else {
+        print("Thank you for using our booking app");
+        exit(0);
+      }
     }
-  }
-
-  print("No Available tickets");
-
-
-
+    print("No Available tickets");
   } else {
     print("User not found!!!");
   }
-  
 }
