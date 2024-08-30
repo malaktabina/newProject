@@ -1,9 +1,4 @@
-class Admin {
-  String addCategory;
-  String editCategory;
-  String deleteCategory;
-  Admin(this.addCategory, this.editCategory, this.deleteCategory);
-}
+import 'dart:io';
 
 class Event {
   String name;
@@ -11,52 +6,140 @@ class Event {
   String place;
   String time;
   int availableTickets;
-  Event(this.name, this.description, this.place, this.time,
-      this.availableTickets);
 
-      bool AvailableTickets(){
-        return availableTickets > 0;
+  Event(this.name, this.description, this.place, this.time, this.availableTickets);
 
-      }
-
-  Tickets() {
-    //if(availableTickets=0,availableTickets>0,availableTickets--)
-    if (AvailableTickets()) {
-      availableTickets--;
-      print("Ticket booked successfully");
-    } else {
-      print("No available tickets");
-    }
+  bool hasAvailableTickets() {
+    return availableTickets > 0;
   }
 }
 
-class Client {
+class User {
   String name;
   int serialNumber;
-  Client(this.name, this.serialNumber);
+  String type;
+  User(this.name, this.serialNumber, this.type);
 }
 
-class Employee {
-  void bookEventForClient(Client, Event) {
-    print("Booking event for ${Client.name}.");
-    Event.Tickets();
+class Admin extends User {
+  Admin(String name, int serialNumber, String type) : super(name, serialNumber, type);
+
+  Event createEvent() {
+    print("Enter event name: ");
+    String? eventName = stdin.readLineSync();
+
+    print("Enter event description: ");
+    String? eventDescription = stdin.readLineSync();
+
+    print("Enter event place: ");
+    String? eventPlace = stdin.readLineSync();
+
+    print("Enter event time: ");
+    String? eventTime = stdin.readLineSync();
+
+    print("Enter event available tickets: ");
+    int eventAvailableTickets = int.parse(stdin.readLineSync() ?? '0');
+
+    return Event(
+      eventName ?? 'Unknown', // Default value if null
+      eventDescription ?? 'No description',
+      eventPlace ?? 'Unknown place',
+      eventTime ?? 'Unknown time',
+      eventAvailableTickets
+    );
+  }
+}
+
+class Employee extends User {
+    Employee(String name, int serialNumber, String type) : super(name, serialNumber, type);
+}
+
+class Client extends User {
+    Client(String name, int serialNumber, String type) : super(name, serialNumber, type);
+}
+
+void reserve(Event event) {
+  if (event.availableTickets > 0) {
+    event.availableTickets -= 1;
+    print("Ticket reserve");
+  } else {
+    print("No tickets available");
   }
 }
 
 void main() {
-  Admin admin = Admin("cinderella play", "editCategory", "deleteCategory");
-  
-  print("Book a ticket for the ${admin.addCategory}");
+  Admin admin = Admin("Rowaida", 123, "Admin");
+  Employee emplopyee = Employee("Malak", 456, "employee");
+  Client client = Client("Mahmoud", 789, "Client");
+
+  print("Who Are You ?");
+  String? answer;
+  answer = stdin.readLineSync();
+
+  if (answer == admin.type) {
+    print("Type your serial number: ");
+    String? input = stdin.readLineSync();
+    int? serialNumber = int.tryParse(input ?? '');
+    if (serialNumber == admin.serialNumber) {
+      print("Welcome ${admin.name}");
+      print("Do you want to create new event ?");
+      String? newEvent;
+      newEvent = stdin.readLineSync();
+      if (newEvent == "yes") {
+        admin.createEvent();
+      }
+    } else {
+      print("Invalid password");
+      return;
+    }
+  } else if (answer == emplopyee.type) {
+
+    print("Welcome ${emplopyee.name}");
+
+  } else if (answer == client.type) {
+
+    print("Welcome ${client.name}");
+
   Event event = Event(
       "Cinderella Play",
       "A magical play about Cinderella and her adventures",
       "The Grand Opera House",
-      "20:00 PM",10);
-    print("play name: ${event.name} ,description: ${event.description},place: ${event.place},time: ${event.time}"); 
+      "20:00 PM",
+      5);
+  print("play name: ${event.name} ,description: ${event.description},place: ${event.place},time: ${event.time}");
+  
+
+  Event event2 = Event(
+      "Programming",
+      "A magical play about Cinderella and her adventures",
+      "The Grand Opera House",
+      "20:00 PM",
+      10);
+
+ 
+  print("Welcome to booking app");
+
+  String? answer;
+
+  while (event.availableTickets > 0) {
+    stdout.write('Do You want to reserve another ticket ?');
+    answer = stdin.readLineSync();
+    if (answer == "yes") {
+      reserve(event);
+      print("Your ticket has been reserved");
+      print("Available tickets is ${event.availableTickets}");
+    } else {
+      print("Thank you for using our booking app");
+      exit(0);
+    }
+  }
+
+  print("No Available tickets");
 
 
-  Client client = Client("Alice", 123456);
 
-  Employee employee = Employee();
-  employee.bookEventForClient(client, event);
+  } else {
+    print("User not found!!!");
+  }
+  
 }
